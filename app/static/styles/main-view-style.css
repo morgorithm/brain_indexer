@@ -1,0 +1,6 @@
+label {
+  display: flex;
+}
+label > input[type="checkbox"] {
+  margin: auto 2vw auto auto;
+}

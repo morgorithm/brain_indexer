@@ -1,0 +1,48 @@
+html,
+body {
+  height: calc(100% - 10px);
+  margin: 5px;
+  background-color: #bcd17d;
+  display: flex;
+  flex-direction: column;
+}
+#content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+#content > .section {
+  flex: 1;
+}
+h1 {
+  text-align: center;
+}
+.card {
+  margin: 2vw;
+  padding: 2vw;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+.single-column {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.double-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+button.warn {
+  background-color: orange;
+}
+button.negative {
+  background-color: red;
+}

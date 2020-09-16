@@ -1,0 +1,29 @@
+#card {
+  display: grid;
+  background-color: tomato;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+#card > span {
+  font-size: 15vw;
+  color: white;
+  margin: auto;
+}
+.button-container {
+  margin: 5px 0px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5px;
+}
+
+#description {
+  display: flex;
+}
+#description > textarea {
+  resize: none;
+  flex: 1;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}

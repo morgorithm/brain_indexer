@@ -10,7 +10,7 @@
     <h1>Brain Indexer</h1>
 
     {% if categories|length > 1 %}
-        <div class="card double-column">
+        <form class="card double-column" id="category-form" method="GET" action="{% url 'brain_indexing' %}">
             <label>
                 <span>Check All</span>
                 <input id="check-all" type="checkbox"/>
@@ -18,10 +18,10 @@
             {% for category in categories %}
                 <label>
                     <span>{{ category.name }}</span>
-                    <input type="checkbox" value={{ category.id }}/>
+                    <input name="categories" type="checkbox" value="{{ category.name }}"/>
                 </label>
             {% endfor %}
-        </div>
+        </form>
     {% else %}
         <div class="card single-column">
             <span>You don't have any card now</span><br>
@@ -31,14 +31,9 @@
 </div>
 
 <div class="section">
-    <button id="start-btn">Start</button>
+    <button form="category-form">Start</button>
 </div>
 <script>
-        const startBtn = document.querySelector('#start-btn')
-        startBtn.addEventListener('click', () => {
-            console.log('test')
-        })
-
         const checkAllBtn = document.querySelector('#check-all')
         checkAllBtn.addEventListener('change', evt => {
             const checked = evt.currentTarget.checked

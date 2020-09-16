@@ -53,9 +53,9 @@ python manage.py runserver
 
 ## Migration
 
-To adjust updated model information, migration should be done propetly
+To adjust updated model information, migration should be done properly
 
-Follow steps are describing how to migrate via Django framework
+Following steps are describing the way to migrate via Django framework
 
 ### 1. Create migrations
 

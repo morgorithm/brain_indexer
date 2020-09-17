@@ -1,23 +1,28 @@
 {% extends "base.html" %}
-
-{% block title %}
-    Brain Indexing
-{% endblock %}
-
+{% block title %} Brain Indexing {% endblock %}
 {% block styles %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/brain-indexing.css' %}">
-{% endblock %}
+{% load static %}
+<link  rel="stylesheet"  type="text/css"  href="{% static 'styles/brain-indexing.css' %}"/>{% endblock %}
 
 {% block content %}
 <div class="section" id="card">
-    <span>{{ card.name }}</span>
+  <span>{{ card.name }}</span>
 </div>
+
 <div class="button-container">
+  <form action="{% url 'known_card' card.id %}" method="POST">
+    {% csrf_token %}
     <button>Known</button>
+  </form>
+
+  <form action="{% url 'unknown_card' card.id %}" method="POST">
+    {% csrf_token %}
     <button class="negative">Unknown</button>
-    <button class="warn">Exit</button>
+  </form>
+
+  <button class="warn">Exit</button>
 </div>
 <div class="section" id="description">
-    <textarea readonly></textarea>
-</div>{% endblock %}
+  <textarea readonly></textarea>
+</div>
+{% endblock %}

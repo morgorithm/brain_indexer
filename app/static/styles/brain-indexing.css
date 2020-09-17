@@ -15,7 +15,12 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 5px;
 }
-
+.button-container > form {
+  display: flex;
+}
+.button-container > form > button {
+  flex: 1;
+}
 #description {
   display: flex;
 }

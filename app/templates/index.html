@@ -1,45 +1,53 @@
-{% extends "base.html" %}
-
-{% block styles %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/main-view-style.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block styles %} {% load static %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'styles/main-view-style.css' %}"
+/>
+{% endblock %} {% block content %}
 <div class="section">
-    <h1>Brain Indexer</h1>
+  <h1>Brain Indexer</h1>
 
-    {% if categories|length > 1 %}
-        <form class="card double-column" id="category-form" method="GET" action="{% url 'brain_indexing' %}">
-            <label>
-                <span>Check All</span>
-                <input id="check-all" type="checkbox"/>
-            </label>
-            {% for category in categories %}
-                <label>
-                    <span>{{ category.name }}</span>
-                    <input name="categories" type="checkbox" value="{{ category.name }}"/>
-                </label>
-            {% endfor %}
-        </form>
-    {% else %}
-        <div class="card single-column">
-            <span>You don't have any card now</span><br>
-            <button>Move to create new card!</button>
-        </div>
-    {% endif %}
+  {% if categories|length > 1 %}
+  <form
+    class="card double-column"
+    id="category-form"
+    method="GET"
+    action="{% url 'brain_indexing' %}"
+  >
+    <label>
+      <span>Check All</span>
+      <input id="check-all" type="checkbox" />
+    </label>
+    {% for category in categories %}
+    <label>
+      <span>{{ category.name }}</span>
+      <input name="categories" type="checkbox" value="{{ category.name }}" />
+    </label>
+    {% endfor %}
+  </form>
+  {% else %}
+  <div class="card single-column">
+    <span>You don't have any card now</span><br />
+    <button>Move to create new card!</button>
+  </div>
+  {% endif %}
 </div>
 
 <div class="section">
-    <button form="category-form">Start</button>
+  <button form="category-form">Start</button>
 </div>
 <script>
-        const checkAllBtn = document.querySelector('#check-all')
-        checkAllBtn.addEventListener('change', evt => {
-            const checked = evt.currentTarget.checked
-            const checkboxes = Array.from(document.querySelectorAll('input[type=checkbox]'))
-            
-            checkboxes.forEach(checkbox => checkbox.checked = checked)
-        })
-    </script>
+  const checkAllBtn = document.querySelector("#check-all");
+  if (checkAllBtn) {
+    checkAllBtn.addEventListener("change", (evt) => {
+      const checked = evt.currentTarget.checked;
+      const checkboxes = Array.from(
+        document.querySelectorAll("input[type=checkbox]")
+      );
+
+      checkboxes.forEach((checkbox) => (checkbox.checked = checked));
+    });
+  }
+</script>
 {% endblock %}

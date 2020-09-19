@@ -109,4 +109,4 @@ python manage.py showmigration
 
 > Jay Lee <jaylee.possible@gmail.com>
 
-> Gingcheong <gincheong2@gmail.com>
+> Gincheong <gincheong2@gmail.com>

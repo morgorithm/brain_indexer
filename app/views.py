@@ -1,44 +1,66 @@
 from django.shortcuts import render
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
 
 from .query import *
 from .forms import *
 
 # Create your views here.
-GET_METHOD_DISABLED = "Get Method is Not Allowed"
 
 # category/read
-def category_read(request, name) :
+@csrf_exempt
+def category_read(request) :
     if request.method == 'POST' :
-        data = CategoryQuery().readCategory(name)
+        form = CategoryForm(request.POST)
+        if form.data :
+            name = form.data['name']
+            data = CategoryQuery().readCategory(name)
+        else :
+            data = CategoryQuery().readCategory()
+            
         json = serializers.serialize('json', data)
-
         return HttpResponse(json, content_type="text/json-comment-filtered")
     elif request.method == 'GET' :
-        return HttpResponse(GET_METHOD_DISABLED)
+        return HttpResponseNotAllowed(['POST'])
 
 # category/create
-def category_create(request, name) :
+@csrf_exempt
+def category_create(request) :
     if request.method == 'POST' :
-        return HttpResponse(CategoryQuery().createCategory(name))
+        form = CategoryForm(request.POST)
+        if form.data :
+            name = form.data['name']
+            return HttpResponse(CategoryQuery().createCategory(name))
+        else :
+            return HttpResponseServerError()
     elif request.method == 'GET' :
-        return HttpResponse(GET_METHOD_DISABLED)
+        return HttpResponseNotAllowed(['POST'])
 
 # category/update
-def category_update(request, oldName, newName) :
+@csrf_exempt
+def category_update(request) :
     if request.method == 'POST' :
-        return HttpResponse(CategoryQuery().updateCategory(oldName, newName))
+        form = CategoryForm(request.POST)
+        if form.data :
+            oldName = form.data['oldName']
+            newName = form.data['newName']
+            return HttpResponse(CategoryQuery().updateCategory(oldName, newName))
+        else :
+            return HttpResponseServerError()
     elif request.method == 'GET' :
-        return HttpResponse(GET_METHOD_DISABLED)
+        return HttpResponseNotAllowed(['POST'])
 
 # category/delete
+@csrf_exempt
 def category_delete(request) :
     if request.method == 'POST' :
         form = CategoryForm(request.POST) # always no data
-        
-        return HttpResponse("Test")
-        # return HttpResponse(CategoryQuery().deleteCategory(name))
+
+        if form.data :
+            name = form.data['name']
+            return HttpResponse(CategoryQuery().deleteCategory(name))
+        else :
+            return HttpResponseServerError()
     elif request.method == 'GET' :
-        return HttpResponse(GET_METHOD_DISABLED)
+        return HttpResponseNotAllowed(['POST'])

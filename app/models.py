@@ -9,6 +9,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Category(BaseModel):
+    objects = models.Manager()
     name = models.CharField(max_length=64, unique=True)
     total = models.IntegerField(default=0)
 
@@ -16,6 +17,7 @@ class Category(BaseModel):
         db_table = 'categories'
 
 class Card(BaseModel):
+    objects = models.Manager()
     name = models.CharField(max_length=64, unique=True, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=False)
     description = models.CharField(max_length=255, null=False)

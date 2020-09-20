@@ -8,4 +8,5 @@ router.register('card', views.CardViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-]
+    path('random', views.getRandomCard),
+]   

@@ -10,20 +10,15 @@ class BaseModel(models.Model):
 
 class Category(BaseModel):
     name = models.CharField(max_length=64, unique=True)
+    total = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'categories'
 
-class CardDetail(BaseModel):
-    description = models.CharField(max_length=255, null=False)
-
-    class Meta:
-        db_table = 'card_details'
-
 class Card(BaseModel):
     name = models.CharField(max_length=64, unique=True, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=False)
-    card_detail = models.ForeignKey(CardDetail, on_delete=models.PROTECT, null=True)
+    description = models.CharField(max_length=255, null=False)
 
     class Meta:
         db_table = 'cards'

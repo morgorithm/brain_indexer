@@ -1,11 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from . import views
 
+router = routers.DefaultRouter()
+router.register('category', views.CategoryViewSet)
+router.register('card', views.CardViewSet)
+
 urlpatterns = [
-    path('category/read', views.category_read, name='category_read'),
-    path('category/create', views.category_create, name='category_create'),
-    path('category/update', views.category_update, name='category_update'),
-    path('category/delete', views.category_delete, name='category_delete'),
-
-
+    path('', include(router.urls)),
 ]

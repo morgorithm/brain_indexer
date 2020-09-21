@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
@@ -24,17 +25,18 @@ def getRandomCard(request) :
             return HttpResponseBadRequest()
         categories = categories.split(',')
 
-        # choose random one
+        # choose random category
         randomCategory = random.choice(categories)
-        # get category's id
-        categoryId = Category.objects.get(name=randomCategory).id
-        card = Card.objects.filter(category=categoryId)
         
-        '''
-        여기서 랜덤으로 한번 더 골라야 함
-        데이터 여러 개 넣고 테스트해보기
-        '''
+        # get category's id
+        try :
+            categoryId = Category.objects.get(name=randomCategory).id
+        except ObjectDoesNotExist :     
+            return HttpResponseBadRequest("there's no category : {}".format(randomCategory))
 
-        return HttpResponse(serializers.serialize('json', card), content_type="text/json-comment-filtered")
+        cards = Card.objects.filter(category=categoryId)
+        randomCard = random.choice(list(cards))
+
+        return HttpResponse(serializers.serialize('json', [randomCard]), content_type="text/json-comment-filtered")
     else :
         return HttpResponseNotAllowed(["GET"])

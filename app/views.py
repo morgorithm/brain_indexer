@@ -3,12 +3,15 @@ from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
+from django.forms.models import model_to_dict
 from rest_framework import viewsets
 
 from .serializers import CategorySerializer, CardSerializer
 from .models import Category, Card
 
 import random
+import json
+from urllib import parse
 
 class CategoryViewSet(viewsets.ModelViewSet) :
     queryset = Category.objects.all()
@@ -35,8 +38,16 @@ def getRandomCard(request) :
             return HttpResponseBadRequest("there's no category : {}".format(randomCategory))
 
         cards = Card.objects.filter(category=categoryId)
-        randomCard = random.choice(list(cards))
+        
+        if len(cards) == 0 :
+            raise ObjectDoesNotExist("{}(id={}) category has no cards".format(randomCategory, categoryId)) # return 500
+        else :
+            randomCard = random.choice(list(cards))
 
-        return HttpResponse(serializers.serialize('json', [randomCard]), content_type="text/json-comment-filtered")
+        dictObject = model_to_dict(randomCard)
+        serialized = json.dumps(dictObject)
+
+        return HttpResponse(serialized)
+
     else :
         return HttpResponseNotAllowed(["GET"])

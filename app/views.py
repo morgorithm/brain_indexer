@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
+from django.db.models.deletion import ProtectedError
 from rest_framework import viewsets
 
 from .serializers import CategorySerializer, CardSerializer
@@ -16,6 +17,18 @@ from urllib import parse
 class CategoryViewSet(viewsets.ModelViewSet) :
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def destroy(self, request, pk=None) :
+        querySet = Category.objects.filter(id=pk)
+        try :
+            querySet.get()
+            querySet.delete()
+        except ObjectDoesNotExist :
+            return HttpResponseServerError(reason="Object Does Not Exist.")
+        except ProtectedError :
+            return HttpResponseServerError(reason="Object is referenced by another model as a foreign key")
+
+        return HttpResponse()
 
 class CardViewSet(viewsets.ModelViewSet) :
     queryset = Card.objects.all()

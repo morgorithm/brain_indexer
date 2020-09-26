@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseServerError, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.db.models.deletion import ProtectedError
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
+
+from django.utils.decorators import method_decorator 
 
 from .serializers import CategorySerializer, CardSerializer
 from .models import Category, Card
@@ -30,10 +33,21 @@ class CategoryViewSet(viewsets.ModelViewSet) :
 
         return HttpResponse()
 
+    @method_decorator(login_required(login_url='/admin/login'))
+    def dispatch(self, *args, **kwargs):
+        return super(CategoryViewSet, self).dispatch(*args, **kwargs)
+
+
 class CardViewSet(viewsets.ModelViewSet) :
     queryset = Card.objects.all()
     serializer_class = CardSerializer
 
+    @method_decorator(login_required(login_url='/admin/login'))
+    def dispatch(self, *args, **kwargs) :
+        return super(CardViewSet, self).dispatch(*args, **kwargs)
+
+
+@login_required(login_url='/admin/login')
 def getRandomCard(request) :
     if request.method == 'GET' :
         categories = request.GET.get('category')
@@ -64,3 +78,10 @@ def getRandomCard(request) :
 
     else :
         return HttpResponseNotAllowed(["GET"])
+
+
+def isLoggedIn(request) :
+    if request.user.is_authenticated :
+        return HttpResponse()
+    else :
+        return HttpResponseRedirect(redirect_to='/admin/login/?next=/') # next=/, 메인으로 이동

@@ -4,12 +4,13 @@ from .models import Category, Card
 
 @receiver(post_save, sender=Card)
 def cardPostSave(sender, **kwargs) :
-    category = kwargs['instance'].category
-    category.total += 1
-    category.save()
+    if kwargs['created'] :
+        category = kwargs['instance'].category
+        category.total += 1
+        category.save()
 
 @receiver(post_delete, sender=Card)
 def cardPostDelete(sender, **kwargs) :
     category = kwargs['instance'].category
     category.total -= 1
-    category.save()     
+    category.save()
